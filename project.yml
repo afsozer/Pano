@@ -1,0 +1,64 @@
+name: Pano
+options:
+  bundleIdPrefix: dev.pano
+  deploymentTarget:
+    macOS: "14.0"
+  createIntermediateGroups: true
+  developmentLanguage: en
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    CODE_SIGN_STYLE: Manual
+    CODE_SIGN_IDENTITY: "-"
+    DEVELOPMENT_TEAM: ""
+    ENABLE_HARDENED_RUNTIME: NO
+    ENABLE_USER_SCRIPT_SANDBOXING: NO
+    DEAD_CODE_STRIPPING: YES
+targets:
+  Pano:
+    type: application
+    platform: macOS
+    sources:
+      - Sources/App
+      - Sources/Shared
+    dependencies:
+      - target: PanoWidgets
+        embed: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.pano.app
+        SWIFT_OBJC_BRIDGING_HEADER: Sources/App/SMCBridge.h
+        INFOPLIST_KEY_LSUIElement: YES
+        INFOPLIST_FILE: Sources/App/Info.plist
+        # An ad-hoc signature's default designated requirement is its cdhash,
+        # which changes on every build, so the Calendar (TCC) permission was
+        # asked again after each install (measured). Pinning the requirement to
+        # the bundle identifier keeps the grant across builds.
+        OTHER_CODE_SIGN_FLAGS: "--requirements '=designated => identifier \"dev.pano.app\"'"
+        INFOPLIST_KEY_NSAppleEventsUsageDescription: "Opens Calendar on the day you click in the calendar widget."
+        INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription: "The calendar widget shows which days have events and what's coming up."
+        INFOPLIST_KEY_NSCalendarsUsageDescription: "The calendar widget shows which days have events and what's coming up."
+        INFOPLIST_KEY_NSHumanReadableCopyright: ""
+        GENERATE_INFOPLIST_FILE: YES
+        COMBINE_HIDPI_IMAGES: YES
+  PanoWidgets:
+    type: app-extension
+    platform: macOS
+    sources:
+      - Sources/Widget
+      - Sources/Shared
+    info:
+      path: Sources/Widget/Info.plist
+      properties:
+        CFBundleDisplayName: Pano
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.pano.app.widgets
+        CODE_SIGN_ENTITLEMENTS: Sources/Widget/Widget.entitlements
+        GENERATE_INFOPLIST_FILE: NO

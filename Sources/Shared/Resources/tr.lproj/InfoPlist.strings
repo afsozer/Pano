@@ -1,0 +1,5 @@
+/* Turkish permission prompts. */
+"NSAppleEventsUsageDescription" = "Takvim kartında tıkladığın günü Takvim'de açmak için.";
+"NSCalendarsFullAccessUsageDescription" = "Takvim widget'ı etkinlik olan günleri ve yaklaşan etkinlikleri gösterir.";
+"NSCalendarsUsageDescription" = "Takvim widget'ı etkinlik olan günleri ve yaklaşan etkinlikleri gösterir.";
+"CFBundleDisplayName" = "Pano";
